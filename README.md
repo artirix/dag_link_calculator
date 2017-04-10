@@ -1,5 +1,7 @@
 # DagLinkCalculator
 
+[![Build Status](https://travis-ci.org/artirix/dag_link_calculator.svg?branch=master)](https://travis-ci.org/artirix/dag_link_calculator)
+
 For a DAG (Direct Acyclic Graph, like the one used with [acts-as-dag](https://github.com/resgraph/acts-as-dag)), it calculates the list of all links (direct and indirect) based on the list of direct links (parent-child).  
 
 Example:
