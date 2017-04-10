@@ -1,6 +1,6 @@
 require 'dag_link_calculator/version'
-require 'dag_link_calculator/direct_link'
 require 'dag_link_calculator/node_link'
+require 'dag_link_calculator/direct_link'
 require 'dag_link_calculator/node_route'
 require 'dag_link_calculator/calculator'
 

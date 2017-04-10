@@ -1,5 +1,9 @@
 module DagLinkCalculator
   NodeLink = Struct.new(:ancestor_id, :descendant_id, :direct, :count) do
+    def direct?
+      direct
+    end
+
     def <=>(other)
       [ancestor_id, descendant_id] <=> [other.ancestor_id, other.descendant_id]
     end

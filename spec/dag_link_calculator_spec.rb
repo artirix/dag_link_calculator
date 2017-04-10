@@ -167,4 +167,144 @@ describe DagLinkCalculator do
       end
     end
   end
+
+  context DagLinkCalculator::DirectLink do
+    describe '.from_hash' do
+      let(:ancestor_id) { 1 }
+      let(:ancestor) { 2 }
+      let(:parent_id) { 3 }
+      let(:parent) { 4 }
+
+      let(:descendant_id) { 'a' }
+      let(:child_id) { 'b' }
+      let(:descendant) { 'c' }
+      let(:child) { 'd' }
+
+      let(:hash) do
+        {
+          ancestor_id: ancestor_id,
+          ancestor: ancestor,
+          parent_id: parent_id,
+          parent: parent,
+
+          descendant_id: descendant_id,
+          child_id: child_id,
+          descendant: descendant,
+          child: child,
+
+          other: :stuff
+        }
+      end
+
+      context 'parsing ancestor' do
+        it 'parses :ancestor_id as ancestor' do
+          res = DagLinkCalculator::DirectLink.from_hash(hash)
+          expect(res.ancestor_id).to eq ancestor_id
+        end
+
+        it 'parses :ancestor as ancestor, if :ancestor_id not found' do
+          hash.delete :ancestor_id
+          res = DagLinkCalculator::DirectLink.from_hash(hash)
+          expect(res.ancestor_id).to eq ancestor
+        end
+
+        it 'parses :parent_id as ancestor, if :ancestor_id and :ancestor not found' do
+          hash.delete :ancestor_id
+          hash.delete :ancestor
+          res = DagLinkCalculator::DirectLink.from_hash(hash)
+          expect(res.ancestor_id).to eq parent_id
+        end
+
+        it 'parses :parent as ancestor, if :ancestor_id and :ancestor and :parent_id not found' do
+          hash.delete :ancestor_id
+          hash.delete :ancestor
+          hash.delete :parent_id
+          res = DagLinkCalculator::DirectLink.from_hash(hash)
+          expect(res.ancestor_id).to eq parent
+        end
+      end
+
+      context 'parsing descendant' do
+        it 'parses :descendant_id as descendant' do
+          res = DagLinkCalculator::DirectLink.from_hash(hash)
+          expect(res.descendant_id).to eq descendant_id
+        end
+
+        it 'parses :descendant as descendant, if :descendant_id not found' do
+          hash.delete :descendant_id
+          res = DagLinkCalculator::DirectLink.from_hash(hash)
+          expect(res.descendant_id).to eq descendant
+        end
+
+        it 'parses :child_id as descendant, if :descendant_id and :descendant not found' do
+          hash.delete :descendant_id
+          hash.delete :descendant
+          res = DagLinkCalculator::DirectLink.from_hash(hash)
+          expect(res.descendant_id).to eq child_id
+        end
+
+        it 'parses :child as descendant, if :descendant_id and :descendant and :child_id not found' do
+          hash.delete :descendant_id
+          hash.delete :descendant
+          hash.delete :child_id
+          res = DagLinkCalculator::DirectLink.from_hash(hash)
+          expect(res.descendant_id).to eq child
+        end
+      end
+    end
+
+    context 'instance' do
+      let(:ancestor) { 1 }
+      let(:descendant) { 2 }
+      let(:hash) do
+        { ancestor: ancestor, descendant: descendant }
+      end
+
+      subject { DagLinkCalculator::DirectLink.from_hash hash }
+
+      describe '#direct?' do
+        it { expect(subject.direct?).to be_truthy }
+      end
+
+      describe '#direct' do
+        it { expect(subject.direct?).to be_truthy }
+      end
+
+      describe '#count' do
+        it { expect(subject.count).to eq 1 }
+      end
+
+      describe '#to_link' do
+        let(:expected_link) { DagLinkCalculator::NodeLink.new(ancestor, descendant, true, 1) }
+
+        it 'creates a link with direct = true and count = 1' do
+          link = subject.to_link
+          expect(link.to_hash).to eq expected_link.to_hash
+          expect(link.direct?).to eq expected_link.direct?
+          expect(link.direct).to eq expected_link.direct
+          expect(link.direct).to eq true
+          expect(link.count).to eq expected_link.count
+          expect(link.count).to eq 1
+        end
+      end
+
+      describe 'sorting' do
+        let(:link1) { DagLinkCalculator::DirectLink.new(1, 20) }
+        let(:link2) { DagLinkCalculator::DirectLink.new(2, 20) }
+        let(:link3) { DagLinkCalculator::DirectLink.new(3, 10) }
+        let(:link4) { DagLinkCalculator::DirectLink.new(3, 20) }
+
+        let(:expected_list) { [link1, link2, link3, link4] }
+
+        it 'sorts by ancestor ASC, then descendant DESC' do
+          list = [link4, link2, link3, link1]
+          expect(list.sort).to eq expected_list
+          5.times do
+            expect(list.shuffle.sort).to eq expected_list
+          end
+        end
+      end
+    end
+  end
+
 end
