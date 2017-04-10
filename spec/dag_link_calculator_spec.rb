@@ -168,6 +168,10 @@ describe DagLinkCalculator do
     end
   end
 
+  context 'with a cycle' do
+    it 'TODO: will recognise a cycle and raise an exception'
+  end
+
   context DagLinkCalculator::DirectLink do
     describe '.from_hash' do
       let(:ancestor_id) { 1 }
