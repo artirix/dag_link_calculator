@@ -1,0 +1,5 @@
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/WordArray:
+  EnforcedStyle: brackets
