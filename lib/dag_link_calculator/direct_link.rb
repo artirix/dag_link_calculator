@@ -1,9 +1,15 @@
 module DagLinkCalculator
   DirectLink = Struct.new(:ancestor_id, :descendant_id) do
     def self.from_hash(hash)
-      a = hash[:ancestor_id] || hash[:parent_id] || hash[:ancestor] || hash[:parent]
-      d = hash[:descendant_id] || hash[:child_id] || hash[:descendant] || hash[:child]
-      new(a, d)
+      new(parse_ancestor(hash), parse_descendant(hash))
+    end
+
+    def self.parse_ancestor(hash)
+      hash[:ancestor_id] || hash[:parent_id] || hash[:ancestor] || hash[:parent]
+    end
+
+    def self.parse_descendant(hash)
+      hash[:descendant_id] || hash[:child_id] || hash[:descendant] || hash[:child]
     end
 
     def direct?

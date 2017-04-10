@@ -29,14 +29,14 @@ module DagLinkCalculator
     private
 
     def build_all_links_hashes
-      all_links_structs.map &:to_hash
+      all_links_structs.map(&:to_hash)
     end
 
     def build_all_links_structs
       grouped = all_routes_structs.group_by { |node_route| [node_route.descendant_id, node_route.ancestor_id] }
       grouped.map do |(descendant_id, ancestor_id), list|
         count = list.size
-        direct = list.any? &:direct?
+        direct = list.any?(&:direct?)
         NodeLink.new(ancestor_id, descendant_id, direct, count)
       end.sort
     end
