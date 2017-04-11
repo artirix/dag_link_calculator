@@ -54,16 +54,26 @@ module DagLinkCalculator
         .to_h
     end
 
-    def routes_for_node(node_id)
+    def routes_for_node(node_id, recursive_ids_list = [])
       @routes_map ||= {}
-      @routes_map[node_id] ||= build_routes_for_node node_id
+      @routes_map[node_id] ||= build_routes_for_node node_id, recursive_ids_list
     end
 
-    def build_routes_for_node(node_id)
+    def build_routes_for_node(node_id, recursive_ids_list)
+      raise CycleException if recursive_ids_list.include? node_id
+      recursive_ids_list << node_id
+
       parents_of(node_id).map do |parent_id|
-        from_parent_routes = routes_for_node(parent_id).map { |r| NodeRoute.new([node_id].concat(r.nodes)) }
-        [NodeRoute.new([node_id, parent_id])].concat(from_parent_routes)
+        [NodeRoute.new([node_id, parent_id])].concat(build_parent_routes_for(node_id, parent_id, recursive_ids_list))
       end.flatten
+    end
+
+    def build_parent_routes_for(node_id, parent_id, recursive_ids_list)
+      routes_for_node(parent_id, recursive_ids_list).map do |r|
+        NodeRoute.new([node_id].concat(r.nodes))
+      end
+    rescue CycleException
+      raise CycleException, "nodes #{parent_id.inspect} and #{node_id.inspect} are ancestor and descendant of each other: cycle detected!"
     end
   end
 end

@@ -1,4 +1,5 @@
 require 'dag_link_calculator/version'
+require 'dag_link_calculator/cycle_exception'
 require 'dag_link_calculator/node_link'
 require 'dag_link_calculator/direct_link'
 require 'dag_link_calculator/node_route'

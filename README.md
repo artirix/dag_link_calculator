@@ -167,9 +167,24 @@ calculator.all_links_structs
 # ]
 ```
 
-## TODO:
+## Cycle Detection
 
-- for now it assumes that the direct links are ok. It should raise an exception if it detects a cycle. 
+When generating the routes, if a cycle is detected (a parent node that is also a descendant node), a `CycleException` will be raised:
+
+e.g. 
+
+```ruby
+      # introducing a cycle (H parent of F)
+      #
+      #  A <-- B <-- C <--- D <-- H
+      #     |            |        ^
+      #     -- F <-- E <--        |
+      #        |                  |
+      #        --------------------
+
+
+'nodes "H" and "F" are ancestor and descendant of each other: cycle detected!'
+```
 
 ## Installation
 

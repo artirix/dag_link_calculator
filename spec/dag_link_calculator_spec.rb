@@ -169,7 +169,102 @@ describe DagLinkCalculator do
   end
 
   context 'with a cycle' do
-    it 'TODO: will recognise a cycle and raise an exception'
+    subject { described_class.from_direct_links_hashes(direct_links_hashes) }
+
+    context 'parent-child child-parent' do
+
+      # introducing a cycle (H parent of F)
+      #
+      #  A <-- B <-- C <--- D <-- H
+      #     |            |
+      #     -- F <-- E <--
+      #        |     ^
+      #        |     |
+      #        -------
+
+      let(:direct_links_hashes) do
+        [
+          { ancestor_id: 'A', descendant_id: 'B' },
+          { ancestor: 'A', descendant_id: 'F' },
+          { ancestor_id: 'B', descendant: 'C' },
+          { parent_id: 'C', descendant_id: 'D' },
+          { ancestor_id: 'F', child_id: 'E' },
+          { parent_id: 'E', child_id: 'D' },
+          { parent: 'D', child: 'H' },
+
+          { parent: 'E', child: 'F' }, # cycle! E parent of F while also being its child
+        ]
+      end
+
+      let(:msg) { 'nodes "E" and "F" are ancestor and descendant of each other: cycle detected!' }
+
+      context 'will recognise a cycle and raise an exception' do
+        it 'when trying to calculate routes (#all_routes_structs)' do
+          expect {
+            subject.all_routes_structs
+          }.to raise_exception(DagLinkCalculator::CycleException, msg)
+        end
+
+        it 'when trying to calculate all links (#all_links_structs)' do
+          expect {
+            subject.all_links_structs
+          }.to raise_exception(DagLinkCalculator::CycleException, msg)
+        end
+
+        it 'when trying to calculate all links (#all_links_hashes)' do
+          expect {
+            subject.all_links_hashes
+          }.to raise_exception(DagLinkCalculator::CycleException, msg)
+        end
+      end
+    end
+
+    context 'parent-great-grandchild great-grandparent-child' do
+
+      # introducing a cycle (H parent of F)
+      #
+      #  A <-- B <-- C <--- D <-- H
+      #     |            |        ^
+      #     -- F <-- E <--        |
+      #        |                  |
+      #        --------------------
+
+      let(:direct_links_hashes) do
+        [
+          { ancestor_id: 'A', descendant_id: 'B' },
+          { ancestor: 'A', descendant_id: 'F' },
+          { ancestor_id: 'B', descendant: 'C' },
+          { parent_id: 'C', descendant_id: 'D' },
+          { ancestor_id: 'F', child_id: 'E' },
+          { parent_id: 'E', child_id: 'D' },
+          { parent: 'D', child: 'H' },
+
+          { parent: 'H', child: 'F' }, # cycle! H parent of F while also being its great-grandchild
+        ]
+      end
+
+      let(:msg) { 'nodes "H" and "F" are ancestor and descendant of each other: cycle detected!' }
+
+      context 'will recognise a cycle and raise an exception' do
+        it 'when trying to calculate routes (#all_routes_structs)' do
+          expect {
+            subject.all_routes_structs
+          }.to raise_exception(DagLinkCalculator::CycleException, msg)
+        end
+
+        it 'when trying to calculate all links (#all_links_structs)' do
+          expect {
+            subject.all_links_structs
+          }.to raise_exception(DagLinkCalculator::CycleException, msg)
+        end
+
+        it 'when trying to calculate all links (#all_links_hashes)' do
+          expect {
+            subject.all_links_hashes
+          }.to raise_exception(DagLinkCalculator::CycleException, msg)
+        end
+      end
+    end
   end
 
   context DagLinkCalculator::DirectLink do
@@ -310,5 +405,4 @@ describe DagLinkCalculator do
       end
     end
   end
-
 end
