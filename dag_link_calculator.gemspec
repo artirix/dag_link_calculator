@@ -10,10 +10,10 @@ Gem::Specification.new do |spec|
   spec.email = ['eturino@eturino.com']
   spec.required_ruby_version = '>= 2.1'
 
-  spec.summary = <<-TXT.gsub(/[\s]*/, ' ')
+  spec.summary = <<-TXT.gsub(/[\s]+/, ' ')
     Given a list of parent-child relationships, it will return a list of links ancestor-descendant, with count
   TXT
-  spec.description = <<-TXT.gsub(/[\s]*/, ' ')
+  spec.description = <<-TXT.gsub(/[\s]+/, ' ')
     Given a list of parent-child relationships, it will return a list of links ancestor-descendant, with count.
     Can be used to restore a list of links in `act-as-dag`, providing that the direct links are correct.
   TXT
