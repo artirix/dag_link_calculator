@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
     Given a list of parent-child relationships, it will return a list of links ancestor-descendant, with count.
     Can be used to restore a list of links in `act-as-dag`, providing that the direct links are correct.
   TXT
-  spec.homepage = 'TODO: Put your gem\'s website or public repo URL here.'
+  spec.homepage = 'https://github.com/artirix/dag_link_calculator'
   spec.license = 'MIT'
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
