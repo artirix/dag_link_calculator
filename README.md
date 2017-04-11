@@ -1,5 +1,6 @@
 # DagLinkCalculator
 
+[![Gem Version](https://badge.fury.io/rb/dag_link_calculator.svg)](https://badge.fury.io/rb/dag_link_calculator)
 [![Build Status](https://travis-ci.org/artirix/dag_link_calculator.svg?branch=master)](https://travis-ci.org/artirix/dag_link_calculator)
 [![Coverage Status](https://coveralls.io/repos/github/artirix/dag_link_calculator/badge.svg?branch=master)](https://coveralls.io/github/artirix/dag_link_calculator?branch=master)
 [![Code Climate](https://codeclimate.com/github/artirix/dag_link_calculator/badges/gpa.svg)](https://codeclimate.com/github/artirix/dag_link_calculator)
