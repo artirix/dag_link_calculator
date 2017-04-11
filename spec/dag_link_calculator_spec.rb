@@ -321,6 +321,15 @@ describe DagLinkCalculator do
           res = DagLinkCalculator::DirectLink.from_hash(hash)
           expect(res.ancestor_id).to eq parent
         end
+
+        it 'raises error if no valid key is found' do
+          hash.delete :ancestor_id
+          hash.delete :ancestor
+          hash.delete :parent_id
+          hash.delete :parent
+
+          expect { DagLinkCalculator::DirectLink.from_hash(hash) }.to raise_exception KeyError, "none of these keys found in the given hash: #{[:ancestor_id, :ancestor, :parent_id, :parent]}"
+        end
       end
 
       context 'parsing descendant' do
@@ -348,6 +357,15 @@ describe DagLinkCalculator do
           hash.delete :child_id
           res = DagLinkCalculator::DirectLink.from_hash(hash)
           expect(res.descendant_id).to eq child
+        end
+
+        it 'raises error if no valid key is found' do
+          hash.delete :descendant_id
+          hash.delete :descendant
+          hash.delete :child_id
+          hash.delete :child
+
+          expect { DagLinkCalculator::DirectLink.from_hash(hash) }.to raise_exception KeyError, "none of these keys found in the given hash: #{[:descendant_id, :descendant, :child_id, :child]}"
         end
       end
     end
