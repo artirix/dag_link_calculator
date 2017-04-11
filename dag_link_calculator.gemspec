@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name = 'dag_link_calculator'
   spec.version = DagLinkCalculator::VERSION
   spec.authors = ['Eduardo Turiño']
-  spec.email = ['eturino@artirix.com']
+  spec.email = ['eturino@eturino.com']
   spec.required_ruby_version = '>= 2.1'
 
   spec.summary = <<-TXT.gsub(/[\s]*/, ' ')
